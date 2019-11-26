@@ -1,37 +1,21 @@
+const { exec } = require('../db/mysql')
+
 const getList = (keywords, author) => {
-  return [
-    {
-      id: 1,
-      title: '博客1',
-      content: '这是博客1的内容',
-      author: '张三',
-      createTime: 1574662498286
-    },
-    {
-      id: 2,
-      title: '博客2',
-      content: '这是博客2的内容',
-      author: '李四',
-      createTime: 1574662575054
-    },
-    {
-      id: 3,
-      title: '博客3',
-      content: '这是博客3的内容',
-      author: '王五',
-      createTime: 1574662583599
-    }
-  ]
+  let sql = 'select * from blogs where 1=1 '
+  if (keywords){
+    sql += `and title like '%${keywords}%' `
+  }
+  if (author) {
+    sql += `and author = '${author}' `
+  }
+  sql += 'order by createtime DESC'
+
+  return exec(sql)
 }
 
 const getDetail = (id) => {
-  return {
-    id: 1,
-    title: '博客1',
-    content: '这是博客1的内容',
-    author: '张三',
-    createTime: 1574662498286
-  }
+  let sql = `select * from blogs where id = '${id}'`
+  return exec(sql)
 }
 
 const newBlog = (blogData = {}) => {

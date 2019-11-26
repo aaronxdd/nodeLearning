@@ -16,15 +16,22 @@ const handleBlogRouter = (req, res) => {
   if (method === 'GET' && path === '/api/blog/list') {
     const keywords = req.query.keywords || ''
     const author = req.query.author || ''
-    const data = getList(keywords, author)
-    return new SuccessModel(data)
+    // const data = getList(keywords, author)
+    // return new SuccessModel(data)
+
+    return getList(keywords, author).then(listData => {
+      return new SuccessModel(listData)
+    })
   }
 
   //获取博客详情
   if (method === 'GET' && path === '/api/blog/detail') {
     if (id) {
-      const data = getDetail(id)
-      return new SuccessModel(data)
+      return getDetail(id).then(blogData => {
+        return new SuccessModel(blogData[0])
+      })
+    } else {
+      console.log('请输入正确id')
     }
   }
 

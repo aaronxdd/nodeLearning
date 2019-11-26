@@ -1,4 +1,4 @@
-const env = progress.env.NODE_ENV
+const env = process.env.NODE_ENV
 
 let MYSQL_CONF = {}
 
@@ -20,6 +20,6 @@ if(env === 'dev') {
   }
 }
 
-modules.exports = {
+module.exports = {
   MYSQL_CONF
 }
