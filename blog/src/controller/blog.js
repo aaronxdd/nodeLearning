@@ -18,7 +18,13 @@ const getDetail = (id) => {
   return exec(sql)
 }
 
-const newBlog = (blogData = {}) => {
+const newBlog = (blogData) => {
+  if (blogData) {
+    let { title, content, author } = blogData
+    let createTime = Date.now()
+    let sql = `insert into blogs (title, content, createTime, author ) values('${title}', '${content}', ${createTime}, '${author}')`
+    return exec(sql)
+  }
   return {
     id: 3
   }
