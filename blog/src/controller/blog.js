@@ -35,7 +35,6 @@ const getDetail = (id) => {
 }
 
 const newBlog = (blogData = {}) => {
-  console.log('---newBlog---', blogData)  
   return {
     id: 3
   }
