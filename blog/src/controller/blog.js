@@ -2,7 +2,7 @@ const { exec } = require('../db/mysql')
 
 const getList = (keywords, author) => {
   let sql = 'select * from blogs where 1=1 '
-  if (keywords){
+  if (keywords) {
     sql += `and title like '%${keywords}%' `
   }
   if (author) {
@@ -25,23 +25,19 @@ const newBlog = (blogData) => {
     let sql = `insert into blogs (title, content, createTime, author ) values('${title}', '${content}', ${createTime}, '${author}')`
     return exec(sql)
   }
-  return {
-    id: 3
+}
+
+const updateBlog = (id, blogData) => {
+  if (blogData) {
+    const { title, content } = blogData
+    let sql = `update blogs set title = '${title}', content = '${content}' where id = ${id}`
+    return exec(sql)
   }
 }
 
-const updateBlog = (id, blogData = {}) => {
-  if (id === '0') {
-    return false
-  }
-  return true
-}
-
-const deletcBlog = (id) => {
-  if (id === '0') {
-    return false
-  } 
-  return true
+const deletcBlog = (id, author) => {
+  let sql = `delete from blogs where id = ${id} and author = '${author}'`
+  return exec(sql)
 }
 
 module.exports = {
