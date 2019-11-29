@@ -1,11 +1,6 @@
 const { login } = require('../controller/user')
 const { SuccessModel, ErroeModel } = require('../model/resModel')
 
-const setCookieExpires = () => {
-  const d = new Date();
-  d.setTime(d.getTime() + (24*60*60*1000))
-  return d.toGMTString()
-}
 
 const handleUserRouter = (req, res) => {
   const method = req.method
@@ -17,7 +12,11 @@ const handleUserRouter = (req, res) => {
     const { username, password } = req.query
     return login(username, password).then(userData => {
       if (userData.length > 0 && userData[0].username) {
-        res.setHeader('Set-Cookie', `username=${userData[0].username}; path=/; httpOnly; expires=${setCookieExpires()}`, )
+        //设置session
+        req.session.username = userData[0].username
+        req.session.realname = userData[0].realname
+        console.log('---req.session---', req.session)
+
         return new SuccessModel('登录成功')
       } else {
         return new ErroeModel('登录失败')
@@ -27,8 +26,8 @@ const handleUserRouter = (req, res) => {
 
   //登录验证
   if (method === 'GET' && path === '/api/user/login-test') {
-    if (req.cookie && req.cookie.username) {
-      return Promise.resolve(req.cookie.username, new SuccessModel('登录验证成功'))
+    if (req.session && req.session.username) {
+      return Promise.resolve(req.session.username, new SuccessModel('登录验证成功'))
     } else {
       return Promise.resolve(new ErroeModel('登录验证失败'))
     }

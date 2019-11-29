@@ -2,6 +2,15 @@ const querystring = require('querystring')
 const handleBlogRouter = require('./src/router/blog')
 const handleUserRouter = require('./src/router/user')
 
+//  全局session数据
+let sessionData = {}
+
+const setCookieExpires = () => {
+  const d = new Date();
+  d.setTime(d.getTime() + (24 * 60 * 60 * 1000))
+  return d.toGMTString()
+}
+
 //用于处理 post data
 const getPostData = (req) => {
   const promise = new Promise((resolve, reject) => {
@@ -49,6 +58,20 @@ const serverHandle = (req, res) => {
     req.cookie[itemArr[0].trim()] = itemArr[1].trim()
   });
 
+  //解析session
+  let userId = req.cookie.userId
+  let needSetSession = false
+  if (userId) {
+    if (!sessionData[userId]) {
+      sessionData[userId] = {}
+    }
+  } else {
+    needSetSession = true
+    userId = Date.now().toString()
+    sessionData[userId] = {}
+  }
+  req.session = sessionData[userId]
+
   //处理post data
   getPostData(req).then(postData => {
     req.body = postData
@@ -62,6 +85,10 @@ const serverHandle = (req, res) => {
     const blogResult = handleBlogRouter(req, res)
     if (blogResult) {
       blogResult.then(blogData => {
+        if (needSetSession) {
+          res.setHeader('Set-Cookie', `userId=${userData[0].userId}; path=/; httpOnly; expires=${setCookieExpires()}`)
+        }
+
         res.end(JSON.stringify(blogData))
       })
       return
