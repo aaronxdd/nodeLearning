@@ -10,7 +10,7 @@ con.connect()
 //统一执行sql的函数
 const exec = (sql) => {
   const promise = new Promise((resolve, reject) => {
-    console.log('sql---', sql)
+    console.log('---sql---', sql)
     con.query(sql, (error, result) => {
       if (error){
         reject(error)
