@@ -86,7 +86,7 @@ const serverHandle = (req, res) => {
     if (blogResult) {
       blogResult.then(blogData => {
         if (needSetSession) {
-          res.setHeader('Set-Cookie', `userId=${userData[0].userId}; path=/; httpOnly; expires=${setCookieExpires()}`)
+          res.setHeader('Set-Cookie', `userId=${userId}; path=/; httpOnly; expires=${setCookieExpires()}`)
         }
 
         res.end(JSON.stringify(blogData))
@@ -98,6 +98,11 @@ const serverHandle = (req, res) => {
     const userData = handleUserRouter(req, res)
     if (userData) {
       userData.then(userData => {
+        if (needSetSession) {
+          console.log('=====userData[0]=====', userData)
+          res.setHeader('Set-Cookie', `userId=${userId}; path=/; httpOnly; expires=${setCookieExpires()}`)
+        }
+
         res.end(JSON.stringify(userData))
       })
       return

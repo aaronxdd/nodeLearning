@@ -15,7 +15,6 @@ const handleUserRouter = (req, res) => {
         //设置session
         req.session.username = userData[0].username
         req.session.realname = userData[0].realname
-        console.log('---req.session---', req.session)
 
         return new SuccessModel('登录成功')
       } else {
@@ -27,7 +26,7 @@ const handleUserRouter = (req, res) => {
   //登录验证
   if (method === 'GET' && path === '/api/user/login-test') {
     if (req.session && req.session.username) {
-      return Promise.resolve(req.session.username, new SuccessModel('登录验证成功'))
+      return Promise.resolve(req.session, new SuccessModel('登录验证成功'))
     } else {
       return Promise.resolve(new ErroeModel('登录验证失败'))
     }
