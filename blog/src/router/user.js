@@ -26,14 +26,14 @@ const handleUserRouter = (req, res) => {
     })
   }
 
-  //登录验证
-  if (method === 'GET' && path === '/api/user/login-test') {
-    if (req.session && req.session.username) {
-      return Promise.resolve(req.session, new SuccessModel('登录验证成功'))
-    } else {
-      return Promise.resolve(new ErroeModel('登录验证失败'))
-    }
-  }
+  // //登录验证
+  // if (method === 'GET' && path === '/api/user/login-test') {
+  //   if (req.session && req.session.username) {
+  //     return Promise.resolve(req.session, new SuccessModel('登录验证成功'))
+  //   } else {
+  //     return Promise.resolve(new ErroeModel('登录验证失败'))
+  //   }
+  // }
 }
 
 module.exports = handleUserRouter

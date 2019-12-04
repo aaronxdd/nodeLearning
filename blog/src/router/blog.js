@@ -7,6 +7,13 @@ const {
 } = require('../controller/blog')
 const { SuccessModel, ErroeModel } = require('../model/resModel')
 
+const loginCheck = (req) => {
+  if(req.session && req.session.username) {
+    return true
+  }
+  return false
+}
+
 const handleBlogRouter = (req, res) => {
   const method = req.method
   const path = req.url.split('?')[0]
@@ -37,7 +44,11 @@ const handleBlogRouter = (req, res) => {
 
   //新建一篇博客
   if (method === 'POST' && path === '/api/blog/new') {
-    req.body.author = 'zhangsan'
+    const loginCheckResult = loginCheck(req)
+    if (!loginCheckResult){
+      return new ErroeModel('未登录')
+    }
+    req.body.author = req.session.username
     return newBlog(req.body).then(newData => {
       return new SuccessModel(newData.insertId)
     })
@@ -45,6 +56,10 @@ const handleBlogRouter = (req, res) => {
 
   //更新一篇博客
   if (method === 'POST' && path === '/api/blog/update') {
+    const loginCheckResult = loginCheck(req)
+    if (!loginCheckResult){
+      return new ErroeModel('未登录')
+    }
     return updateBlog(id, req.body).then(data => {
       if (data.affectedRows > 0) {
         return new SuccessModel('更新成功')
@@ -56,7 +71,11 @@ const handleBlogRouter = (req, res) => {
 
   //删除一篇博客
   if (method === 'POST' && path === '/api/blog/del') {
-    let author = 'zhangsan'
+    const loginCheckResult = loginCheck(req)
+    if (!loginCheckResult){
+      return new ErroeModel('未登录')
+    }
+    let author = req.session.username
     return deletcBlog(id, author).then(data => {
       if (data.affectedRows > 0) {
         return new SuccessModel('删除成功')
