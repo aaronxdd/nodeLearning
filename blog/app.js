@@ -1,9 +1,10 @@
 const querystring = require('querystring')
 const handleBlogRouter = require('./src/router/blog')
 const handleUserRouter = require('./src/router/user')
+const { set, get } = require('./src/db/redis')
 
 //  全局session数据
-let sessionData = {}
+// let sessionData = {}
 
 const setCookieExpires = () => {
   const d = new Date();
@@ -61,19 +62,29 @@ const serverHandle = (req, res) => {
   //解析session
   let userId = req.cookie.userId
   let needSetSession = false
-  if (userId) {
-    if (!sessionData[userId]) {
-      sessionData[userId] = {}
-    }
-  } else {
+  // if (userId) {
+  //   if (!sessionData[userId]) {
+  //     sessionData[userId] = {}
+  //   }
+  // } else {
+  //   needSetSession = true
+  //   userId = Date.now().toString()
+  //   sessionData[userId] = {}
+  // }
+  // req.session = sessionData[userId]
+
+  if (!userId) {
     needSetSession = true
     userId = Date.now().toString()
-    sessionData[userId] = {}
-  }
-  req.session = sessionData[userId]
-
-  //处理post data
-  getPostData(req).then(postData => {
+    // set(userId, {})
+    req.session = {}
+  } 
+  req.sessionId = userId
+  get(req.sessionId).then(sessionData => {
+    req.session = sessionData || {}
+    return getPostData(req)
+  })
+  .then(postData => {
     req.body = postData
 
     //处理blog路由
@@ -99,7 +110,6 @@ const serverHandle = (req, res) => {
     if (userData) {
       userData.then(userData => {
         if (needSetSession) {
-          console.log('=====userData[0]=====', userData)
           res.setHeader('Set-Cookie', `userId=${userId}; path=/; httpOnly; expires=${setCookieExpires()}`)
         }
 

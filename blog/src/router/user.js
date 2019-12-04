@@ -1,5 +1,6 @@
 const { login } = require('../controller/user')
 const { SuccessModel, ErroeModel } = require('../model/resModel')
+const { set } = require('../db/redis')
 
 
 const handleUserRouter = (req, res) => {
@@ -15,6 +16,8 @@ const handleUserRouter = (req, res) => {
         //设置session
         req.session.username = userData[0].username
         req.session.realname = userData[0].realname
+
+        set(req.sessionId, req.session)
 
         return new SuccessModel('登录成功')
       } else {
