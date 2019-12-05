@@ -18,7 +18,7 @@ node app.js
 ## 2.blog
 基于nodejs写的博客项目（后端）
 
-cd blog
+cd blog/blog-server
 
 npm install / npm i
 
