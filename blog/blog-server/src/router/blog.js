@@ -26,6 +26,14 @@ const handleBlogRouter = (req, res) => {
     // const data = getList(keywords, author)
     // return new SuccessModel(data)
 
+    if (req.query.isadmin) {
+      const loginCheckResult = loginCheck(req)
+      if (!loginCheckResult) {
+        return new ErroeModel('未登录')
+      }
+      author = req.session.username
+    }
+
     return getList(keywords, author).then(listData => {
       return new SuccessModel(listData)
     })

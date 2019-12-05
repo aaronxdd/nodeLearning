@@ -8,9 +8,9 @@ const handleUserRouter = (req, res) => {
   const path = req.url.split('?')[0]
 
   //登录
-  if (method === 'GET' && path === '/api/user/login') {
-    // const { username, password } = req.body
-    const { username, password } = req.query
+  if (method === 'POST' && path === '/api/user/login') {
+    const { username, password } = req.body
+    // const { username, password } = req.query
     return login(username, password).then(userData => {
       if (userData.length > 0 && userData[0].username) {
         //设置session
