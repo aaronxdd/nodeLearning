@@ -15,6 +15,10 @@
   justify-content: center;
 }
 
+.align .welcome {
+  font-size: 5rem;
+}
+
 /* helpers/grid.css */
 
 :root {

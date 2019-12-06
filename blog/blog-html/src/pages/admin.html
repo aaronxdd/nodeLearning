@@ -29,10 +29,10 @@
 <body>
     <h1 style="border-bottom: 1px solid #ccc; padding-bottom: 10px;">管理中心</h1>
     <p>
-        <a href="/new.html">新建博客</a>
+        <a href="./new.html">新建博客</a>
     </p>
     <div style="margin-bottom: 10px;">
-        <input id="text-keyword">
+        <input id="text-keywords">
         <button id="btn-search">搜索</button>
     </div>
     <table id="table-container">
@@ -74,15 +74,15 @@
         }
 
         // 获取 dom 元素
-        const $textKeyword = $('#text-keyword')
+        const $textKeywords = $('#text-keywords')
         const $btnSearch = $('#btn-search')
         const $tableContainer = $('#table-container')
 
         // 拼接接口 url
         let url = '/api/blog/list?isadmin=1'  // 增加一个 isadmin=1 参数，使用登录者的用户名，后端也需要修改 ！！！
         const urlParams = getUrlParams()
-        if (urlParams.keyword) {
-            url += '&keyword=' + urlParams.keyword
+        if (urlParams.keywords) {
+            url += '&keywords=' + urlParams.keywords
         }
 
         // 加载数据
@@ -98,10 +98,10 @@
                 $tableContainer.append($(`
                     <tr>
                         <td>
-                            <a href="/detail.html?id=${item.id}" target="_blank">${item.title}</a>
+                            <a href="./detail.html?id=${item.id}" target="_blank">${item.title}</a>
                         </td>
                         <td>
-                            <a href="/edit.html?id=${item.id}">编辑</a>
+                            <a href="./edit.html?id=${item.id}">编辑</a>
                         </td>
                         <td>
                             <a data-id="${item.id}" class="item-del">删除</a>
@@ -113,8 +113,8 @@
 
         // 搜索
         $btnSearch.click(() => {
-            const keyword = $textKeyword.val()
-            location.href = '/admin.html?keyword=' + keyword
+            const keywords = $textKeywords.val()
+            location.href = './admin.html?keywords=' + keywords
         })
 
         // 删除

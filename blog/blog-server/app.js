@@ -43,7 +43,6 @@ const getPostData = (req) => {
 
 const serverHandle = (req, res) => {
   //设置返回格式 JSON
-  console.log('1111111')
   res.setHeader('Content-type', 'application/json')
 
   //解析query
